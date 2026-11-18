@@ -66,6 +66,11 @@ jobs:
           npm install @capacitor/core @capacitor/cli @capacitor/android --legacy-peer-deps
           npx cap init "Gorgor" "com.gorgor.app" --web-dir out
           npx cap add android
+          npm install @capacitor/assets --legacy-peer-deps
+mkdir -p assets
+cp icon.png assets/icon-only.png
+cp icon.png assets/icon-foreground.png
+npx capacitor-assets generate --android --iconBackgroundColor '#FFFFFF' --iconBackgroundColorDark '#FFFFFF'
           npx cap sync android
           cd android
           chmod +x gradlew
