@@ -14,5 +14,15 @@ jobs:
         with:
           node-version: 22
       - run: npm install --legacy-peer-deps
-      - run: npx drizzle-kit push --force
+      - name: Write drizzle config
+        run: |
+          cat > drizzle.ci.config.ts <<'EOF2'
+          import { defineConfig } from "drizzle-kit";
+          export default defineConfig({
+            dialect: "postgresql",
+            schema: "./src/db/schema.ts",
+            dbCredentials: { url: process.env.DATABASE_URL! },
+          });
+          EOF2
+      - run: npx drizzle-kit push --force --config=drizzle.ci.config.ts
       - run: npx tsx src/db/seed.ts
