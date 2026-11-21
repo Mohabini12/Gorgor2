@@ -1,6 +1,10 @@
 // API base + token helper. On Vercel (web) NEXT_PUBLIC_API_BASE is empty => same-origin.
 // In the Android APK it is set to the Vercel URL => all /api calls go to the backend.
 export const API_BASE = (process.env.NEXT_PUBLIC_API_BASE ?? "").replace(/\/$/, "");
+// Registration is OFF unless NEXT_PUBLIC_ALLOW_REGISTRATION=true
+export const REGISTRATION_ENABLED =
+  process.env.NEXT_PUBLIC_ALLOW_REGISTRATION === "true";
+
 const TOKEN_KEY = "gorgor_token";
 const SIGNED_OUT_KEY = "gorgor_signed_out";
 

@@ -1,3 +1,4 @@
+import { randomBytes } from "crypto";
 import { count } from "drizzle-orm";
 import {
   db,
@@ -61,7 +62,9 @@ async function runSeed(): Promise<void> {
   const [{ total }] = await db.select({ total: count() }).from(users);
   if (total > 0) return;
 
-  const defaultPassHash = hashPassword("Gorgor@2026");
+  const defaultPassHash = hashPassword(
+    process.env.SEED_PASSWORD ?? randomBytes(24).toString("hex")
+  );
   const now = new Date();
   const minsAgo = (m: number) => new Date(now.getTime() - m * 60 * 1000);
 

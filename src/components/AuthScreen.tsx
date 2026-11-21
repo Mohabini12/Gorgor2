@@ -1,21 +1,16 @@
 "use client";
 
-import { setToken } from "@/lib/api";
+import { setToken, REGISTRATION_ENABLED } from "@/lib/api";
 import React, { useState } from "react";
 import { Shield, LogIn, UserPlus, AlertCircle, Globe } from "lucide-react";
 import { useApp } from "@/context/AppContext";
 import { GorgorLogo } from "./GorgorLogo";
 
-const ROSTER_PRESETS = [
-  { username: "warsame", callsign: "GORGOR-01", name: "Col. Hassan Warsame", role: "Squad Commander" },
-  { username: "amina", callsign: "GORGOR-02", name: "Lt. Amina Farah", role: "Lead Navigator" },
-  { username: "mahad", callsign: "GORGOR-03", name: "Sgt. Mahad Nur", role: "Signals & Comms" },
-  { username: "hodan", callsign: "EAGLE-07", name: "Capt. Hodan Ali", role: "Coastal Survey" },
-];
 
 export function AuthScreen({ onDone }: { onDone?: () => void }) {
   const { t, lang, setLang, setUser, branding } = useApp();
   const [mode, setMode] = useState<"login" | "register">("login");
+  const activeMode = REGISTRATION_ENABLED ? mode : "login";
   const [identifier, setIdentifier] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -133,7 +128,8 @@ export function AuthScreen({ onDone }: { onDone?: () => void }) {
             </p>
           </div>
 
-          {/* Mode Tabs */}
+          {/* Mode Tabs (hidden when registration is disabled) */}
+          {REGISTRATION_ENABLED && (
           <div className="grid grid-cols-2 gap-1 p-1 rounded-xl bg-[#071120] border border-[#94B8E8]/12 mb-5">
             <button
               type="button"
@@ -166,6 +162,7 @@ export function AuthScreen({ onDone }: { onDone?: () => void }) {
               {t.auth.register}
             </button>
           </div>
+          )}
 
           {error && (
             <div className="mb-4 p-3 rounded-xl bg-red-500/12 border border-red-500/35 text-xs text-red-200 flex items-start gap-2">
@@ -174,7 +171,7 @@ export function AuthScreen({ onDone }: { onDone?: () => void }) {
             </div>
           )}
 
-          {mode === "login" ? (
+          {activeMode === "login" ? (
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
                 <label className="block text-xs font-medium text-[#B8C7DC] mb-1.5">
@@ -311,32 +308,6 @@ export function AuthScreen({ onDone }: { onDone?: () => void }) {
               </button>
             </form>
           )}
-        </div>
-
-        {/* Registered Operator Switcher for quick multi-user testing */}
-        <div className="rounded-2xl bg-[#0D1B30]/80 border border-[#94B8E8]/14 p-4">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-[#B8C7DC]">
-            {t.auth.switchOperatorTitle}
-          </h3>
-          <p className="text-[11px] text-[#7F95B2] mt-1 mb-3">
-            {t.auth.switchOperatorDesc}
-          </p>
-          <div className="grid grid-cols-2 gap-2">
-            {ROSTER_PRESETS.map((op) => (
-              <button
-                key={op.username}
-                type="button"
-                disabled={submitting}
-                onClick={(e) => handleLogin(e, op.username, "Gorgor@2026")}
-                className="min-h-[52px] p-2.5 rounded-xl bg-[#132642] hover:bg-[#1B3458] border border-[#94B8E8]/15 hover:border-[#2D8CFF]/60 text-left transition-colors"
-              >
-                <div className="text-xs font-mono-grid font-semibold text-[#53A4FF]">
-                  {op.callsign}
-                </div>
-                <div className="text-xs text-white truncate">{op.name}</div>
-              </button>
-            ))}
-          </div>
         </div>
       </div>
     </div>

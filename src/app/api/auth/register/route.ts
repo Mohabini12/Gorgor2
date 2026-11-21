@@ -3,6 +3,7 @@ import { or, eq } from "drizzle-orm";
 import { z } from "zod";
 import { db, users } from "@/db";
 import { ensureSeeded } from "@/db/seed";
+import { REGISTRATION_ENABLED } from "@/lib/api";
 import {
   createSessionForUser,
   generateId,
@@ -36,6 +37,12 @@ const AVATAR_PALETTE = [
 ];
 
 export async function POST(req: NextRequest) {
+  if (!REGISTRATION_ENABLED) {
+    return NextResponse.json(
+      { error: "Registration is disabled." },
+      { status: 403 }
+    );
+  }
   try {
     await ensureSeeded();
     const body = await req.json();

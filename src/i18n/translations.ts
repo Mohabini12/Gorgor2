@@ -46,7 +46,7 @@ export const translations = {
       creatingAccount: "Creating Account...",
       switchOperatorTitle: "Field Roster Quick Access",
       switchOperatorDesc:
-        "Select a registered operator to test multi-account private and squad messaging (Password: Gorgor@2026).",
+        "",
       authError: "Authentication failed. Check your credentials.",
     },
     dashboard: {
@@ -405,7 +405,7 @@ export const translations = {
       creatingAccount: "Koontada waa la abuurayaa...",
       switchOperatorTitle: "Koontooyinka Diyaarsan ee Tijaabada",
       switchOperatorDesc:
-        "Dooro sarkaal diiwaangashan si aad u tijaabiso fariimaha gaarka ah iyo kuwa kooxda (Sirta: Gorgor@2026).",
+        "",
       authError: "Soo gelitaanku wuu fashilmay. Hubi xogtaada.",
     },
     dashboard: {
