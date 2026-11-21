@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  NEXT_PUBLIC_API_BASE: https://gorgor2.vercel.app
+  NEXT_PUBLIC_API_BASE: https://gorgor2.netlify.app
 
 jobs:
   build:
