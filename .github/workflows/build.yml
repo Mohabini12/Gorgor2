@@ -41,7 +41,7 @@ jobs:
           APP_DIR=$(dirname $(find work -name "package.json" -not -path "*/node_modules/*" | head -n 1))
           cd "$APP_DIR"
           npm install --legacy-peer-deps
-          rm -rf src/app/api app/api
+          rm -rf src/app/api app/api src/app/admin
           cat << 'EOF2' > next.config.mjs
           /** @type {import('next').NextConfig} */
           const nextConfig = {
