@@ -1,0 +1,106 @@
+@import "tailwindcss";
+@import "maplibre-gl/dist/maplibre-gl.css";
+
+:root {
+  --bg-navy-950: #071120;
+  --bg-navy-900: #0d1b30;
+  --bg-navy-800: #132642;
+  --bg-navy-700: #1b3458;
+  --accent-blue: #2d8cff;
+  --accent-blue-hover: #53a4ff;
+  --accent-blue-deep: #1a6ed8;
+  --text-primary: #ffffff;
+  --text-secondary: #b8c7dc;
+  --text-muted: #7f95b2;
+  --border-subtle: rgba(148, 184, 232, 0.16);
+  --border-active: rgba(45, 140, 255, 0.5);
+}
+
+@layer base {
+  html,
+  body {
+    background-color: #071120;
+    color: #ffffff;
+    font-family: var(--font-inter), system-ui, -apple-system, "Roboto", sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior-y: contain;
+    min-height: 100dvh;
+  }
+
+  button,
+  a,
+  select,
+  input,
+  textarea {
+    touch-action: manipulation;
+  }
+}
+
+.font-mono-grid {
+  font-family: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Safe-area inset helpers for modern Android gesture navigation & notched displays */
+.pb-safe {
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+}
+
+.pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* Subtle tactical scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #071120;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 184, 232, 0.24);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(45, 140, 255, 0.55);
+}
+
+/* Military Navy night-ops filter applied only to raster canvas when Tactical Navy basemap is active */
+.gorgor-map-tactical .maplibregl-canvas {
+  filter: invert(92%) hue-rotate(188deg) saturate(135%) brightness(88%) contrast(106%);
+}
+
+/* MapLibre UI customization matching GORGOR navy theme */
+.maplibregl-ctrl-attrib {
+  background: rgba(7, 17, 32, 0.78) !important;
+  color: #7f95b2 !important;
+  font-size: 10px !important;
+  border-radius: 6px !important;
+  border: 1px solid rgba(148, 184, 232, 0.14) !important;
+  margin-bottom: 52px !important;
+}
+.maplibregl-ctrl-attrib a {
+  color: #9ec5f8 !important;
+}
+.maplibregl-ctrl-attrib-button {
+  background-color: rgba(13, 27, 48, 0.9) !important;
+  filter: invert(1);
+}
+.maplibregl-popup-content {
+  background: #0d1b30 !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(45, 140, 255, 0.4) !important;
+  border-radius: 12px !important;
+  padding: 12px !important;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55) !important;
+}
+.maplibregl-popup-tip {
+  border-top-color: #0d1b30 !important;
+  border-bottom-color: #0d1b30 !important;
+}
+.maplibregl-popup-close-button {
+  color: #b8c7dc !important;
+  font-size: 18px !important;
+  padding: 4px 8px !important;
+}
