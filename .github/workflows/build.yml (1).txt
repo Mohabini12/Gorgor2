@@ -1,0 +1,75 @@
+name: Build Next.js to Android APK
+
+on:
+  workflow_dispatch:
+
+env:
+  NEXT_PUBLIC_API_BASE: https://gorgor2.vercel.app
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Prepare project
+        run: |
+          mkdir -p work
+          ZIP_FILE=$(find . -maxdepth 1 -name "*.zip" | head -n 1)
+          if [ -n "$ZIP_FILE" ]; then
+            unzip -q "$ZIP_FILE" -d work
+          else
+            tar --exclude=./.git --exclude=./.github --exclude=./work -cf - . | tar -xf - -C work
+          fi
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Configure Static Export and Build Web App
+        env:
+          DATABASE_URL: "postgresql://dummy:dummy@localhost:5432/dummy"
+        run: |
+          APP_DIR=$(dirname $(find work -name "package.json" -not -path "*/node_modules/*" | head -n 1))
+          cd "$APP_DIR"
+          npm install --legacy-peer-deps
+          rm -rf src/app/api app/api
+          cat << 'EOF2' > next.config.mjs
+          /** @type {import('next').NextConfig} */
+          const nextConfig = {
+            output: 'export',
+            images: { unoptimized: true },
+            typescript: { ignoreBuildErrors: true },
+          };
+          export default nextConfig;
+          EOF2
+          rm -f next.config.ts next.config.js
+          npm run build
+
+      - name: Add Capacitor and Build Android APK
+        run: |
+          set -euxo pipefail
+          APP_DIR=$(dirname $(find work -name "package.json" -not -path "*/node_modules/*" | head -n 1))
+          cd "$APP_DIR"
+          npm install @capacitor/core @capacitor/cli @capacitor/android @capacitor/assets --legacy-peer-deps
+          npx cap init "Gorgor" "com.gorgor.app" --web-dir out
+          npx cap add android
+          npx cap sync android
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+          find . -name "*.apk"
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug
+          path: work/**/android/app/build/outputs/apk/debug/*.apk
