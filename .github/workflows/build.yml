@@ -59,7 +59,7 @@ jobs:
           set -euxo pipefail
           APP_DIR=$(dirname $(find work -name "package.json" -not -path "*/node_modules/*" | head -n 1))
           cd "$APP_DIR"
-          npm install @capacitor/core @capacitor/cli @capacitor/android @capacitor/assets --legacy-peer-deps
+          npm install @capacitor/core @capacitor/cli @capacitor/android @capacitor/assets --legacy-peer-deps src/app/admin
           npx cap init "Gorgor" "com.gorgor.app" --web-dir out
           npx cap add android
           npx cap sync android
