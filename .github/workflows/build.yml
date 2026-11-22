@@ -64,7 +64,7 @@ jobs:
           npx cap add android
           # Ku dar Location permissions manifest-ka
           MANIFEST=android/app/src/main/AndroidManifest.xml
-          grep -q ACCESS_FINE_LOCATION "$MANIFEST" || sed -i 's|<application|<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />\n    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />\n    <uses-feature android:name="android.hardware.location.gps" />\n    <application|' "$MANIFEST"
+          grep -q ACCESS_FINE_LOCATION "$MANIFEST" || sed -i 's|<application|<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />\n <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />\n <uses-feature android:name="android.hardware.location.gps" />\n <application|' "$MANIFEST"
           grep -n "LOCATION" "$MANIFEST"
           npx cap sync android
           cd android
