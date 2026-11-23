@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { apiUrl } from "@/lib/api";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -277,12 +277,6 @@ function buildBaseStyle(basemap: BasemapStyleId): StyleSpecification {
           "circle-stroke-width": 2.5,
         },
       },
-      ...RANGE_LAYERS,
-    ],
-  };
-}
-
-const RANGE_LAYERS: StyleSpecification["layers"] = [
       {
         id: "range-pointer-line",
         type: "line",
@@ -317,22 +311,8 @@ const RANGE_LAYERS: StyleSpecification["layers"] = [
           "circle-stroke-width": 2,
         },
       },
-];
-
-function ensureRangeLayers(map: MapLibreMap) {
-  try {
-    if (!map.getSource("range")) {
-      map.addSource("range", {
-        type: "geojson",
-        data: { type: "FeatureCollection", features: [] },
-      });
-    }
-    for (const layer of RANGE_LAYERS) {
-      if (!map.getLayer(layer.id)) map.addLayer(layer);
-    }
-  } catch {
-    // style not ready yet; retried on the next update
-  }
+    ],
+  };
 }
 
 const LOCAL_WP_KEY = "gorgor_local_waypoints";
@@ -633,17 +613,11 @@ export function MapScreen() {
       });
     };
 
-    let readyDone = false;
-    const markReady = () => {
-      if (readyDone) return;
-      readyDone = true;
+    map.on("load", () => {
       setMapReady(true);
       syncViewportState();
-      updateGraticule(map, showGridRef.current);
-    };
-    map.on("load", markReady);
-    map.once("styledata", markReady);
-    map.once("idle", markReady);
+      updateGraticule(map, true);
+    });
 
     map.on("move", () => {
       const c = map.getCenter();
@@ -935,7 +909,6 @@ export function MapScreen() {
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !mapReady) return;
-    ensureRangeLayers(map);
     const src = map.getSource("range") as GeoJSONSource | undefined;
     if (!src) return;
 
